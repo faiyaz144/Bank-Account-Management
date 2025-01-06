@@ -73,7 +73,7 @@ int main() {
         cout << "4. Exit" << endl;
         cout << "Enter your choice: ";
         cin >> choice;
-
+//mypart
         switch (choice) {
             case 1: {
                 double amount;
