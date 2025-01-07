@@ -3,7 +3,6 @@
 
 using namespace std;
 
-// Base Class: BankAccount
 class BankAccount {
 private:
     string accountNumber;
@@ -11,12 +10,14 @@ private:
     double balance;
 
 public:
+    // Constructor
     BankAccount(string accNum, string holderName, double initialBalance) {
         accountNumber = accNum;
         accountHolderName = holderName;
         balance = initialBalance;
     }
 
+    // Getters
     string getAccountNumber() const {
         return accountNumber;
     }
@@ -29,6 +30,7 @@ public:
         return balance;
     }
 
+    // Deposit
     void deposit(double amount) {
         if (amount > 0) {
             balance += amount;
@@ -38,6 +40,7 @@ public:
         }
     }
 
+    // Withdraw
     void withdraw(double amount) {
         if (amount > 0 && amount <= balance) {
             balance -= amount;
@@ -47,6 +50,7 @@ public:
         }
     }
 
+    // Display Account Information
     void displayAccountInfo() const {
         cout << "Account Number: " << accountNumber << endl;
         cout << "Account Holder: " << accountHolderName << endl;
@@ -54,31 +58,35 @@ public:
     }
 };
 
-// Derived Class: SavingsAccount
+// Derived class
 class SavingsAccount : public BankAccount {
 private:
-    double interestRate;
+    double interestRate; // Interest rate as a percentage
 
 public:
-    SavingsAccount(string accNum, string holderName, double initialBalance, double rate) 
-        : BankAccount(accNum, holderName, initialBalance) {
-        interestRate = rate;
+    // Constructor
+    SavingsAccount(string accNum, string holderName, double initialBalance, double rate)
+        : BankAccount(accNum, holderName, initialBalance), interestRate(rate) {}
+
+    // Method to calculate interest
+    void calculateInterest() const {
+        double interest = (getBalance() * interestRate) / 100;
+        cout << "Interest earned: " << interest << endl;
     }
 
-    void calculateInterest() {
-        double interest = balance * interestRate;
-        balance += interest;
-        cout << "Interest calculated. New balance: " << balance << endl;
+    // Override displayAccountInfo to include interest rate
+    void displayAccountInfo() const {
+        BankAccount::displayAccountInfo();
+        cout << "Interest Rate: " << interestRate << "%" << endl;
     }
 };
 
 int main() {
     // Sample account details
-    SavingsAccount myAccount("1234567890", "mahir", 10000.0, 0.05); 
+    SavingsAccount mySavings("1234567890", "mahir", 1000.0, 3.5);
 
     string enteredAccountNumber;
     string enteredAccountHolder;
-
     cout << "***** LOGIN *****" << endl;
     cout << "Enter Account Number: ";
     cin >> enteredAccountNumber;
@@ -86,14 +94,13 @@ int main() {
     cin.ignore(); // Clear newline character
     getline(cin, enteredAccountHolder);
 
-    // Login check
-    if (enteredAccountNumber == myAccount.getAccountNumber() && 
-        enteredAccountHolder == myAccount.getAccountHolderName()) {
+    if (enteredAccountNumber == mySavings.getAccountNumber() &&
+        enteredAccountHolder == mySavings.getAccountHolderName()) {
         cout << "Login Successful!" << endl;
 
         int choice;
         do {
-            cout << "\nBank Account Management System" << endl;
+            cout << "\nSavings Account Management System" << endl;
             cout << "1. Deposit" << endl;
             cout << "2. Withdraw" << endl;
             cout << "3. Display Account Information" << endl;
@@ -107,31 +114,29 @@ int main() {
                     double amount;
                     cout << "Enter Deposit Amount: ";
                     cin >> amount;
-                    myAccount.deposit(amount);
+                    mySavings.deposit(amount);
                     break;
                 }
                 case 2: {
                     double amount;
                     cout << "Enter Withdrawal Amount: ";
                     cin >> amount;
-                    myAccount.withdraw(amount);
+                    mySavings.withdraw(amount);
                     break;
                 }
                 case 3: {
-                    myAccount.displayAccountInfo();
+                    mySavings.displayAccountInfo();
                     break;
                 }
                 case 4: {
-                    myAccount.calculateInterest();
+                    mySavings.calculateInterest();
                     break;
                 }
-                case 5: {
+                case 5:
                     cout << "Exiting..." << endl;
                     break;
-                }
-                default: {
+                default:
                     cout << "Invalid choice." << endl;
-                }
             }
         } while (choice != 5);
     } else {
