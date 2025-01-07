@@ -3,6 +3,7 @@
 
 using namespace std;
 
+// Base Class: BankAccount
 class BankAccount {
 private:
     string accountNumber;
@@ -10,14 +11,12 @@ private:
     double balance;
 
 public:
-    // Constructor
     BankAccount(string accNum, string holderName, double initialBalance) {
         accountNumber = accNum;
         accountHolderName = holderName;
         balance = initialBalance;
     }
 
-    // Getters
     string getAccountNumber() const {
         return accountNumber;
     }
@@ -30,7 +29,6 @@ public:
         return balance;
     }
 
-    // Deposit
     void deposit(double amount) {
         if (amount > 0) {
             balance += amount;
@@ -40,7 +38,6 @@ public:
         }
     }
 
-    // Withdraw
     void withdraw(double amount) {
         if (amount > 0 && amount <= balance) {
             balance -= amount;
@@ -50,7 +47,6 @@ public:
         }
     }
 
-    // Display Account Information
     void displayAccountInfo() const {
         cout << "Account Number: " << accountNumber << endl;
         cout << "Account Holder: " << accountHolderName << endl;
@@ -58,21 +54,40 @@ public:
     }
 };
 
+// Derived Class: SavingsAccount
+class SavingsAccount : public BankAccount {
+private:
+    double interestRate;
+
+public:
+    SavingsAccount(string accNum, string holderName, double initialBalance, double rate) 
+        : BankAccount(accNum, holderName, initialBalance) {
+        interestRate = rate;
+    }
+
+    void calculateInterest() {
+        double interest = balance * interestRate;
+        balance += interest;
+        cout << "Interest calculated. New balance: " << balance << endl;
+    }
+};
+
 int main() {
-    // Sample account details (for demonstration purposes)
-    BankAccount myAccount("1234567890", "mahir", 20000.0);
+    // Sample account details
+    SavingsAccount myAccount("1234567890", "mahir", 10000.0, 0.05); 
 
     string enteredAccountNumber;
     string enteredAccountHolder;
-    cout << "***** LOGIN *****"<<endl;
+
+    cout << "***** LOGIN *****" << endl;
     cout << "Enter Account Number: ";
     cin >> enteredAccountNumber;
     cout << "Enter Account Holder Name: ";
     cin.ignore(); // Clear newline character
     getline(cin, enteredAccountHolder);
 
-    // Simple login check (replace with more secure methods)
-    if (enteredAccountNumber == myAccount.getAccountNumber() &&
+    // Login check
+    if (enteredAccountNumber == myAccount.getAccountNumber() && 
         enteredAccountHolder == myAccount.getAccountHolderName()) {
         cout << "Login Successful!" << endl;
 
@@ -82,7 +97,8 @@ int main() {
             cout << "1. Deposit" << endl;
             cout << "2. Withdraw" << endl;
             cout << "3. Display Account Information" << endl;
-            cout << "4. Exit" << endl;
+            cout << "4. Calculate Interest" << endl;
+            cout << "5. Exit" << endl;
             cout << "Enter your choice: ";
             cin >> choice;
 
@@ -105,17 +121,22 @@ int main() {
                     myAccount.displayAccountInfo();
                     break;
                 }
-                case 4:
+                case 4: {
+                    myAccount.calculateInterest();
+                    break;
+                }
+                case 5: {
                     cout << "Exiting..." << endl;
                     break;
-                default:
+                }
+                default: {
                     cout << "Invalid choice." << endl;
+                }
             }
-        } while (choice != 4);
+        } while (choice != 5);
     } else {
         cout << "Login Failed. Incorrect account details." << endl;
     }
 
     return 0;
 }
-
