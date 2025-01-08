@@ -91,8 +91,8 @@ int main() {
     cout << "Enter Account Number: ";
     cin >> enteredAccountNumber;
     cout << "Enter Account Holder Name: ";
-    cin.ignore(); // Clear newline character
-    getline(cin, enteredAccountHolder);
+   cout << "Enter Account Holder Name: ";
+   cin >> enteredAccountHolder;
 
     if (enteredAccountNumber == mySavings.getAccountNumber() &&
         enteredAccountHolder == mySavings.getAccountHolderName()) {
